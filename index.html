@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Continuous Probability Modeling</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>Continuous Probability Modeling</h1>
+
+    <p>
+        Interactive simulator for continuous probability distributions
+    </p>
+
+</header>
+
+<!-- DISTRIBUTION -->
+
+<section>
+
+    <h2>Select Distribution</h2>
+
+    <select id="distribution">
+
+        <option value="uniform">
+            Uniform
+        </option>
+
+        <option value="triangular">
+            Triangular
+        </option>
+
+        <option value="linear">
+            Linear
+        </option>
+
+        <option value="piecewise">
+            Piecewise
+        </option>
+
+        <option value="normal">
+            Normal
+        </option>
+
+    </select>
+
+</section>
+
+<!-- PARAMETERS -->
+<section>
+
+    <h2>Distribution Parameters</h2>
+
+    <label>Lower Bound (a)</label>
+    <input type="number" id="a" value="0">
+
+    <label>Upper Bound (b)</label>
+    <input type="number" id="b" value="10">
+
+    <label>Mode (Triangular)</label>
+    <input type="number" id="mode" value="5">
+
+    <label>Mean (Normal)</label>
+    <input type="number" id="mean" value="0">
+
+    <label>Standard Deviation</label>
+    <input type="number" id="std" value="1">
+
+    <label>Linear Slope</label>
+    <input type="number" id="slope" value="1">
+
+    <label>Piecewise Breakpoint 1</label>
+    <input type="number" id="break1" value="3">
+
+    <label>Piecewise Breakpoint 2</label>
+    <input type="number" id="break2" value="8">
+
+</section>
+
+
+
+
+<!-- PROBABILITY -->
+
+<section>
+
+    <h2>Probability Calculator</h2>
+
+    <select id="probabilityType">
+
+        <option value="below">
+            Below a Point
+        </option>
+
+        <option value="above">
+            Above a Point
+        </option>
+
+        <option value="between">
+            Between Two Points
+        </option>
+
+    </select>
+
+    <label>x1</label>
+    <input type="number" id="x1" value="2">
+
+    <label>x2</label>
+    <input type="number" id="x2" value="7">
+
+    <button onclick="calculateProbability()">
+        Calculate Probability
+    </button>
+
+    <h3 id="result">
+        Probability = 0
+    </h3>
+
+</section>
+
+<!-- GRAPH -->
+
+<section>
+
+    <h2>PDF Graph</h2>
+
+    <div id="graph"></div>
+
+</section>
+
+<!-- DATA MODELING -->
+<section>
+
+    <h2>Data Modeling (C9)</h2>
+
+    <p>
+        Upload a CSV dataset to estimate distribution parameters.
+    </p>
+
+    <input
+        type="file"
+        id="fileInput"
+        accept=".csv"
+    >
+
+    <br><br>
+
+    <label>
+        Distribution to Fit
+    </label>
+
+    <select id="fitDistributionType">
+
+        <option value="uniform">
+            Uniform
+        </option>
+
+        <option value="triangular">
+            Triangular
+        </option>
+
+        <option value="linear">
+            Linear
+        </option>
+
+        <option value="piecewise">
+            Piecewise Uniform
+        </option>
+
+        <option value="normal">
+            Normal
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <button onclick="fitDistribution()">
+
+        Fit Distribution
+
+    </button>
+
+    <div id="histogram"></div>
+
+    <div id="fitResults">
+
+        <h3>
+            Estimated Parameters
+        </h3>
+
+        <p id="parametersText">
+
+        </p>
+
+        <h3>
+            Interpretation
+        </h3>
+
+        <p id="interpretationText">
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- GITHUB PAGES -->
+
+<section>
+
+    <h2>Website Link</h2>
+
+    <p>
+
+        Deployed Website:
+
+        <a
+        href="PASTE_YOUR_GITHUB_LINK_HERE"
+        target="_blank">
+
+            Open Website
+
+        </a>
+
+    </p>
+
+</section>
+
+<!-- AI DEVELOPMENT RECORD -->
+<section>
+
+    <h2>
+        AI Development Record
+    </h2>
+
+    <h3>
+        AI Conversation Links
+    </h3>
+
+    <ul>
+
+        <li>
+
+            <a
+            href="PASTE_CHATGPT_LINK_1"
+            target="_blank">
+
+                ChatGPT Development Session 1
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a
+            href="PASTE_CHATGPT_LINK_2"
+            target="_blank">
+
+                ChatGPT Development Session 2
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <h3>
+        How AI Was Used
+    </h3>
+
+    <p>
+
+        AI was used to generate initial HTML,
+        CSS and JavaScript code for probability
+        distributions, parameter estimation,
+        histogram generation and graphing.
+
+    </p>
+
+    <h3>
+        What Was Modified
+    </h3>
+
+    <p>
+
+        Generated code was reviewed,
+        corrected and adapted to satisfy
+        the C8 and C9 project requirements.
+
+    </p>
+
+    <h3>
+        Testing Performed
+    </h3>
+
+    <p>
+
+        The webpage was tested using the
+        required CSV datasets.
+        Histograms, estimated parameters,
+        fitted PDFs and probability
+        calculations were verified.
+
+    </p>
+
+</section>
+
+
+
+
+
+<footer>
+
+    <p>
+
+        Created for Global Economics
+
+    </p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
