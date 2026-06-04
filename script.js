@@ -1338,6 +1338,34 @@ function shadeProbability(
 
     };
 
+    let lowerLine = {
+
+    x: [start, start],
+
+    y: [0, Math.max(...curveY)],
+
+    type: "scatter",
+
+    mode: "lines",
+
+    name: "Lower Bound"
+
+};
+
+let upperLine = {
+
+    x: [end, end],
+
+    y: [0, Math.max(...curveY)],
+
+    type: "scatter",
+
+    mode: "lines",
+
+    name: "Upper Bound"
+
+};
+
     Plotly.newPlot(
 
         "graph",
@@ -1347,7 +1375,25 @@ function shadeProbability(
             curve,
             shaded
 
-        ]
+        ],
+
+        {
+
+            title: "Probability Region",
+
+            hovermode: "closest"
+
+        },
+
+        {
+
+            responsive: true,
+
+            displayModeBar: true,
+
+            scrollZoom: true
+
+        }
 
     );
 
@@ -1391,17 +1437,35 @@ function graphDistribution(
 
             title: title,
 
+            hovermode: "closest",
+
             xaxis: {
 
-                title: "x"
+                title: "x",
+
+                showgrid: true,
+
+                zeroline: true
 
             },
 
             yaxis: {
 
-                title: "f(x)"
+                title: "f(x)",
+
+                showgrid: true
 
             }
+
+        },
+
+    {
+
+        responsive: true,
+
+        displayModeBar: true,
+
+        scrollZoom: true
 
         }
 
