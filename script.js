@@ -1373,7 +1373,9 @@ let upperLine = {
         [
 
             curve,
-            shaded
+            shaded,
+            lowerLine,
+            upperLine
 
         ],
 
@@ -1381,7 +1383,26 @@ let upperLine = {
 
             title: "Probability Region",
 
-            hovermode: "closest"
+            hovermode: "x unified",
+
+            annotations: [
+
+                {
+
+                    x:
+                    (start + end) / 2,
+
+                    y:
+                    Math.max(...curveY),
+
+                    text:
+                    "Selected Area",
+
+                    showarrow: true
+
+                }
+
+            ]
 
         },
 
@@ -1415,6 +1436,7 @@ function graphDistribution(
     let trace = {
 
         x: x,
+
         y: y,
 
         type: "scatter",
@@ -1422,6 +1444,14 @@ function graphDistribution(
         mode: "lines",
 
         fill: "tozeroy",
+
+        hovertemplate:
+
+            "x = %{x:.2f}<br>" +
+
+            "PDF = %{y:.4f}" +
+
+            "<extra></extra>",
 
         name: title
 
@@ -1437,35 +1467,96 @@ function graphDistribution(
 
             title: title,
 
-            hovermode: "closest",
+            hovermode: "x unified",
 
             xaxis: {
-
-                title: "x",
-
-                showgrid: true,
-
-                zeroline: true
-
+                title: "x"
             },
 
             yaxis: {
-
-                title: "f(x)",
-
-                showgrid: true
-
+                title: "f(x)"
             }
 
         },
 
-    {
+        {
 
-        responsive: true,
+            responsive: true,
 
-        displayModeBar: true,
+            displayModeBar: true,
 
-        scrollZoom: true
+            scrollZoom: true,
+
+            modeBarButtonsToAdd: [
+
+                "select2d",
+
+                "lasso2d"
+
+            ]
+
+        }
+
+    );
+    document
+    .getElementById("graph")
+    .on(
+
+        "plotly_click",
+
+        function(data){
+
+            let clickedX =
+
+                data.points[0].x;
+
+            document
+            .getElementById("x1")
+            .value =
+
+                clickedX.toFixed(2);
+
+            calculateProbability();
+
+        }
+
+    );
+    document
+    .getElementById("graph")
+    .on(
+
+        "plotly_doubleclick",
+
+        function(data){
+
+            return false;
+
+        }
+
+    );
+    document
+    .getElementById("graph")
+    .addEventListener(
+
+        "dblclick",
+
+        function(){
+
+            let x2 = prompt(
+
+                "Enter x2 value"
+
+            );
+
+            if(x2 !== null){
+
+                document
+                .getElementById("x2")
+                .value = x2;
+
+                calculateProbability();
+
+            }
 
         }
 
