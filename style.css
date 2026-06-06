@@ -3,22 +3,11 @@
 ========================== */
 
 body {
-
     font-family: "Segoe UI", sans-serif;
-
     margin: 0;
     padding: 0;
-
-    background:
-    linear-gradient(
-        135deg,
-        #f4e8ff,
-        #ece4ff,
-        #e4dcff
-    );
-
+    background: linear-gradient(135deg, #f4e8ff, #ece4ff, #e4dcff);
     color: #2d1b4e;
-
 }
 
 /* ==========================
@@ -26,42 +15,22 @@ body {
 ========================== */
 
 header {
-
-    background:
-    linear-gradient(
-        135deg,
-        #5b2c83,
-        #7d3cff,
-        #a855f7
-    );
-
+    background: linear-gradient(135deg, #5b2c83, #7d3cff, #a855f7);
     color: white;
-
     text-align: center;
-
     padding: 35px;
-
-    box-shadow:
-    0 4px 15px rgba(0,0,0,0.2);
-
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 header h1 {
-
     margin: 0;
-
     font-size: 2.5rem;
-
 }
 
 header p {
-
     margin-top: 10px;
-
     font-size: 1.1rem;
-
     opacity: 0.9;
-
 }
 
 /* ==========================
@@ -69,30 +38,18 @@ header p {
 ========================== */
 
 section {
-
     background: white;
-
     margin: 25px auto;
-
     padding: 25px;
-
     width: 90%;
-
     max-width: 1100px;
-
     border-radius: 18px;
-
-    box-shadow:
-    0 6px 18px rgba(90,50,150,0.15);
-
+    box-shadow: 0 6px 18px rgba(90,50,150,0.15);
     transition: 0.3s;
-
 }
 
 section:hover {
-
     transform: translateY(-3px);
-
 }
 
 /* ==========================
@@ -100,16 +57,10 @@ section:hover {
 ========================== */
 
 h2 {
-
     color: #6d28d9;
-
     margin-bottom: 15px;
-
-    border-bottom:
-    2px solid #d8b4fe;
-
+    border-bottom: 2px solid #d8b4fe;
     padding-bottom: 8px;
-
 }
 
 /* ==========================
@@ -117,15 +68,10 @@ h2 {
 ========================== */
 
 label {
-
     display: block;
-
     margin-top: 12px;
-
     font-weight: bold;
-
     color: #4c1d95;
-
 }
 
 /* ==========================
@@ -134,34 +80,20 @@ label {
 
 input,
 select {
-
     width: 100%;
-
     padding: 12px;
-
     margin-top: 5px;
-
     border-radius: 10px;
-
-    border:
-    1px solid #d8b4fe;
-
+    border: 1px solid #d8b4fe;
     box-sizing: border-box;
-
     font-size: 15px;
-
 }
 
 input:focus,
 select:focus {
-
     outline: none;
-
     border-color: #7c3aed;
-
-    box-shadow:
-    0 0 8px rgba(124,58,237,0.3);
-
+    box-shadow: 0 0 8px rgba(124,58,237,0.3);
 }
 
 /* ==========================
@@ -169,47 +101,22 @@ select:focus {
 ========================== */
 
 button {
-
     width: 100%;
-
     padding: 14px;
-
     margin-top: 15px;
-
     border: none;
-
     border-radius: 12px;
-
-    background:
-    linear-gradient(
-        135deg,
-        #7c3aed,
-        #9333ea
-    );
-
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
     color: white;
-
     font-size: 15px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.3s;
-
 }
 
 button:hover {
-
     transform: scale(1.02);
-
-    background:
-    linear-gradient(
-        135deg,
-        #6d28d9,
-        #7e22ce
-    );
-
+    background: linear-gradient(135deg, #6d28d9, #7e22ce);
 }
 
 /* ==========================
@@ -217,29 +124,20 @@ button:hover {
 ========================== */
 
 #result {
-
     color: #5b21b6;
-
     font-size: 1.2rem;
-
     margin-top: 15px;
-
     font-weight: bold;
-
 }
 
 #parametersText,
 #interpretationText {
-
     background: #f8f5ff;
-
     padding: 15px;
-
     border-radius: 10px;
-
-    border-left:
-    5px solid #8b5cf6;
-
+    border-left: 5px solid #8b5cf6;
+    /* FIXED: ensure text is visible inside dark dashboard */
+    color: #e8d5ff;
 }
 
 /* ==========================
@@ -248,17 +146,11 @@ button:hover {
 
 #graph,
 #histogram {
-
     width: 100%;
-
     height: 550px;
-
     margin-top: 20px;
-
     border-radius: 12px;
-
     overflow: hidden;
-
 }
 
 /* ==========================
@@ -266,19 +158,13 @@ button:hover {
 ========================== */
 
 a {
-
     color: #7c3aed;
-
     text-decoration: none;
-
     font-weight: bold;
-
 }
 
 a:hover {
-
     text-decoration: underline;
-
 }
 
 /* ==========================
@@ -286,15 +172,11 @@ a:hover {
 ========================== */
 
 ul {
-
     padding-left: 25px;
-
 }
 
 li {
-
     margin-bottom: 10px;
-
 }
 
 /* ==========================
@@ -302,22 +184,11 @@ li {
 ========================== */
 
 footer {
-
     margin-top: 30px;
-
-    background:
-    linear-gradient(
-        135deg,
-        #5b2c83,
-        #7d3cff
-    );
-
+    background: linear-gradient(135deg, #5b2c83, #7d3cff);
     color: white;
-
     text-align: center;
-
     padding: 20px;
-
 }
 
 /* ==========================
@@ -325,61 +196,61 @@ footer {
 ========================== */
 
 @media (max-width: 768px) {
-
     header h1 {
-
         font-size: 2rem;
-
     }
 
     section {
-
         width: 95%;
-
     }
-
 }
+
+/* ==========================
+   FIT DASHBOARD
+========================== */
+
 .fit-dashboard {
-
-    background: linear-gradient(
-        135deg,
-        #071426,
-        #0c223f
-    );
-
+    background: linear-gradient(135deg, #071426, #0c223f);
     border-radius: 20px;
-
     padding: 25px;
-
     margin-top: 20px;
 }
 
+.fit-dashboard h3 {
+    color: #a78bfa;
+    margin-top: 0;
+}
+
+.fit-dashboard p {
+    color: #c4b5fd;
+}
+
 .fit-cards {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit,minmax(250px,1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 15px;
-
     margin-top: 20px;
 }
 
 .fit-card {
-
     background: rgba(255,255,255,0.05);
-
     border: 1px solid rgba(255,255,255,0.1);
-
     border-radius: 15px;
-
     padding: 15px;
-
     color: white;
 }
 
 .fit-card h3 {
-
     color: #7df9ff;
+    margin-top: 0;
+}
+
+/* FIXED: text inside fit-card (parametersText / interpretationText)
+   needs to override the generic rule above that adds a light background */
+.fit-card #parametersText,
+.fit-card #interpretationText {
+    background: transparent;
+    border-left: 3px solid #7df9ff;
+    color: #e0e0e0;
+    padding: 10px;
 }
