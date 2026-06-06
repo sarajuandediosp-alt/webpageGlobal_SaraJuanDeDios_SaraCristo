@@ -501,66 +501,113 @@ function pdfValue(x) {
 }
 
 //////////////////////////////////////////////////////////
-// NUMERICAL INTEGRATION
+// CDF EXACTA POR DISTRIBUCIÓN (sin loops, instantáneo)
+// Reemplaza la integración numérica que congelaba el navegador
 //////////////////////////////////////////////////////////
 
-function integratePDF(start, end) {
-    let area = 0;
-    const step = 0.01; // 0.001 was too heavy and froze the browser
+function getCDFValue(x) {
+    const distribution = document.getElementById("distribution").value;
 
-    for (let x = start; x < end; x += step) {
-        area += pdfValue(x) * step;
+    if (distribution === "uniform") {
+        const a = parseFloat(document.getElementById("a").value);
+        const b = parseFloat(document.getElementById("b").value);
+        if (x <= a) return 0;
+        if (x >= b) return 1;
+        return (x - a) / (b - a);
     }
 
-    return area;
-}
+    if (distribution === "triangular") {
+        const a = parseFloat(document.getElementById("a").value);
+        const b = parseFloat(document.getElementById("b").value);
+        const c = parseFloat(document.getElementById("mode").value);
+        if (x <= a) return 0;
+        if (x >= b) return 1;
+        if (x <= c) return Math.pow(x - a, 2) / ((b - a) * (c - a));
+        return 1 - Math.pow(b - x, 2) / ((b - a) * (b - c));
+    }
 
-//////////////////////////////////////////////////////////
-// CALCULATE PROBABILITY
-//////////////////////////////////////////////////////////
+    if (distribution === "linear") {
+        const a = parseFloat(document.getElementById("a").value);
+        const b = parseFloat(document.getElementById("b").value);
+        if (x <= a) return 0;
+        if (x >= b) return 1;
+        return Math.pow(x - a, 2) / Math.pow(b - a, 2);
+    }
 
-function calculateProbability() {
-    const distribution = document.getElementById("distribution").value;
-    const type = document.getElementById("probabilityType").value;
-
-    const x1 = parseFloat(document.getElementById("x1").value);
-    const x2 = parseFloat(document.getElementById("x2").value);
-
-    // FIXED: use distribution-aware integration bounds instead of fixed ±100
-    let lowerBound, upperBound;
+    if (distribution === "piecewise") {
+        const a      = parseFloat(document.getElementById("a").value);
+        const b      = parseFloat(document.getElementById("b").value);
+        const break1 = parseFloat(document.getElementById("break1").value);
+        const break2 = parseFloat(document.getElementById("break2").value);
+        const h1     = parseFloat(document.getElementById("h1").value);
+        const h2     = parseFloat(document.getElementById("h2").value);
+        const h3     = parseFloat(document.getElementById("h3").value);
+        if (x <= a) return 0;
+        if (x >= b) return 1;
+        if (x < break1) return h1 * (x - a);
+        const area1 = h1 * (break1 - a);
+        if (x < break2) return area1 + h2 * (x - break1);
+        const area2 = area1 + h2 * (break2 - break1);
+        return area2 + h3 * (x - break2);
+    }
 
     if (distribution === "normal") {
         const mean = parseFloat(document.getElementById("mean").value);
         const std  = parseFloat(document.getElementById("std").value);
-        lowerBound = mean - 8 * std;
-        upperBound = mean + 8 * std;
-    } else {
-        lowerBound = parseFloat(document.getElementById("a").value) - 1;
-        upperBound = parseFloat(document.getElementById("b").value) + 1;
+        return normalCDF(x, mean, std);
     }
+
+    return 0;
+}
+
+// Approximation of the normal CDF using the error function
+function normalCDF(x, mean, std) {
+    return 0.5 * (1 + erf((x - mean) / (std * Math.sqrt(2))));
+}
+
+// Abramowitz & Stegun approximation of erf — max error 1.5e-7
+function erf(z) {
+    const t = 1 / (1 + 0.3275911 * Math.abs(z));
+    const poly = t * (0.254829592 +
+        t * (-0.284496736 +
+        t * (1.421413741 +
+        t * (-1.453152027 +
+        t * 1.061405429))));
+    const result = 1 - poly * Math.exp(-z * z);
+    return z >= 0 ? result : -result;
+}
+
+//////////////////////////////////////////////////////////
+// CALCULATE PROBABILITY  (usa CDF exacta, sin integración)
+//////////////////////////////////////////////////////////
+
+function calculateProbability() {
+    const type = document.getElementById("probabilityType").value;
+    const x1   = parseFloat(document.getElementById("x1").value);
+    const x2   = parseFloat(document.getElementById("x2").value);
 
     let probability = 0;
 
     if (type === "below") {
-        probability = integratePDF(lowerBound, x1);
-        shadeProbability(lowerBound, x1);
+        probability = getCDFValue(x1);
+        shadeProbability(x1, null, "below");
     } else if (type === "above") {
-        probability = integratePDF(x1, upperBound);
-        shadeProbability(x1, upperBound);
+        probability = 1 - getCDFValue(x1);
+        shadeProbability(x1, null, "above");
     } else {
-        probability = integratePDF(x1, x2);
-        shadeProbability(x1, x2);
+        probability = getCDFValue(x2) - getCDFValue(x1);
+        shadeProbability(x1, x2, "between");
     }
 
     document.getElementById("result").innerHTML =
-        "Probability = " + probability.toFixed(4);
+        "Probability = " + Math.max(0, probability).toFixed(4);
 }
 
 //////////////////////////////////////////////////////////
 // SHADED REGION
 //////////////////////////////////////////////////////////
 
-function shadeProbability(start, end) {
+function shadeProbability(x1, x2, type) {
     const distribution = document.getElementById("distribution").value;
 
     let plotMin, plotMax;
@@ -575,19 +622,18 @@ function shadeProbability(start, end) {
         plotMax = parseFloat(document.getElementById("b").value) + 1;
     }
 
-    let curveX = [];
-    let curveY = [];
-    let shadeX = [];
-    let shadeY = [];
+    // Determine shade bounds from type
+    const shadeStart = type === "above"   ? x1     : (type === "below" ? plotMin : x1);
+    const shadeEnd   = type === "below"   ? x1     : (type === "above" ? plotMax : x2);
 
     const step = smartStep(plotMin, plotMax);
+    let curveX = [], curveY = [], shadeX = [], shadeY = [];
 
     for (let x = plotMin; x <= plotMax; x += step) {
         const y = pdfValue(x);
         curveX.push(x);
         curveY.push(y);
-
-        if (x >= start && x <= end) {
+        if (x >= shadeStart && x <= shadeEnd) {
             shadeX.push(x);
             shadeY.push(y);
         }
@@ -634,7 +680,7 @@ function shadeProbability(start, end) {
             title: "Probability Region",
             hovermode: "x unified",
             annotations: [{
-                x: (start + end) / 2,
+                x: (shadeStart + shadeEnd) / 2,
                 y: maxY,
                 text: "Selected Area",
                 showarrow: true
