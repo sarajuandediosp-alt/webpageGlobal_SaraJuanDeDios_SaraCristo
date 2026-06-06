@@ -841,7 +841,6 @@ function drawFittedPiecewise(
 //////////////////////////////////////////////////////////
 // HISTOGRAM + PDF
 //////////////////////////////////////////////////////////
-
 function drawHistogramAndPDF(
     x,
     y,
@@ -861,8 +860,7 @@ function drawHistogramAndPDF(
 
         marker: {
 
-            color:
-            "#6b7cff"
+            color: "#6b7cff"
 
         },
 
@@ -897,11 +895,8 @@ function drawHistogramAndPDF(
         "histogram",
 
         [
-
             histogram,
-
             pdf
-
         ],
 
         {
@@ -942,8 +937,19 @@ function drawHistogramAndPDF(
 
             }
 
+        },
+
+        {
+
+            responsive: true,
+            displayModeBar: true,
+            scrollZoom: true
+
         }
 
+    );
+
+}
 
 //////////////////////////////////////////////////////////
 // PDF VALUE
