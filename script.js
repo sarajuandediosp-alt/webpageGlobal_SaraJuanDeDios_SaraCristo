@@ -883,7 +883,7 @@ function drawHistogramAndPDF(
 
         line: {
 
-            width: 4
+            width: 4,
             color: "#5fffff"
 
         },
