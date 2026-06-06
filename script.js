@@ -658,7 +658,7 @@ function shadeProbability(x1, x2, type) {
     };
 
     const lowerLine = {
-        x: [start, start],
+        x: [shadeStart, shadeStart],
         y: [0, maxY],
         type: "scatter",
         mode: "lines",
@@ -666,7 +666,7 @@ function shadeProbability(x1, x2, type) {
     };
 
     const upperLine = {
-        x: [end, end],
+        x: [shadeEnd, shadeEnd],
         y: [0, maxY],
         type: "scatter",
         mode: "lines",
