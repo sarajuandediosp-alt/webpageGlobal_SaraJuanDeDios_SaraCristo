@@ -339,3 +339,47 @@ footer {
     }
 
 }
+.fit-dashboard {
+
+    background: linear-gradient(
+        135deg,
+        #071426,
+        #0c223f
+    );
+
+    border-radius: 20px;
+
+    padding: 25px;
+
+    margin-top: 20px;
+}
+
+.fit-cards {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(250px,1fr));
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.fit-card {
+
+    background: rgba(255,255,255,0.05);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    border-radius: 15px;
+
+    padding: 15px;
+
+    color: white;
+}
+
+.fit-card h3 {
+
+    color: #7df9ff;
+}
