@@ -296,6 +296,17 @@ function fitPiecewise() {
 }
 
 //////////////////////////////////////////////////////////
+// SMART STEP — always produces at most MAX_POINTS points
+// regardless of the data range (fixes freeze with large values)
+//////////////////////////////////////////////////////////
+
+const MAX_POINTS = 1000;
+
+function smartStep(min, max) {
+    return Math.max((max - min) / MAX_POINTS, 1e-6);
+}
+
+//////////////////////////////////////////////////////////
 // FITTED UNIFORM PDF
 //////////////////////////////////////////////////////////
 
@@ -303,8 +314,9 @@ function drawFittedUniform(min, max) {
     let x = [];
     let y = [];
     const height = 1 / (max - min);
+    const step = smartStep(min, max);
 
-    for (let i = min; i <= max; i += 0.1) {
+    for (let i = min; i <= max; i += step) {
         x.push(i);
         y.push(height);
     }
@@ -319,8 +331,11 @@ function drawFittedUniform(min, max) {
 function drawFittedNormal(mean, std) {
     let x = [];
     let y = [];
+    const lo = mean - 4 * std;
+    const hi = mean + 4 * std;
+    const step = smartStep(lo, hi);
 
-    for (let i = mean - 4 * std; i <= mean + 4 * std; i += 0.1) {
+    for (let i = lo; i <= hi; i += step) {
         x.push(i);
         y.push(normalPDF(i, mean, std));
     }
@@ -335,8 +350,9 @@ function drawFittedNormal(mean, std) {
 function drawFittedTriangular(a, b, c) {
     let x = [];
     let y = [];
+    const step = smartStep(a, b);
 
-    for (let i = a; i <= b; i += 0.1) {
+    for (let i = a; i <= b; i += step) {
         x.push(i);
         if (i <= c) {
             y.push((2 * (i - a)) / ((b - a) * (c - a)));
@@ -356,8 +372,9 @@ function drawFittedLinear(min, max) {
     let x = [];
     let y = [];
     const range = max - min;
+    const step = smartStep(min, max);
 
-    for (let i = min; i <= max; i += 0.1) {
+    for (let i = min; i <= max; i += step) {
         x.push(i);
         y.push(2 * (i - min) / Math.pow(range, 2));
     }
@@ -372,8 +389,9 @@ function drawFittedLinear(min, max) {
 function drawFittedPiecewise(min, max, break1, break2, h1, h2, h3) {
     let x = [];
     let y = [];
+    const step = smartStep(min, max);
 
-    for (let i = min; i <= max; i += 0.1) {
+    for (let i = min; i <= max; i += step) {
         x.push(i);
         if      (i < break1) { y.push(h1); }
         else if (i < break2) { y.push(h2); }
@@ -562,7 +580,9 @@ function shadeProbability(start, end) {
     let shadeX = [];
     let shadeY = [];
 
-    for (let x = plotMin; x <= plotMax; x += 0.05) {
+    const step = smartStep(plotMin, plotMax);
+
+    for (let x = plotMin; x <= plotMax; x += step) {
         const y = pdfValue(x);
         curveX.push(x);
         curveY.push(y);
@@ -689,10 +709,11 @@ function drawUniform() {
     if (b <= a) { alert("Upper bound must be greater than lower bound."); return; }
 
     const h = 1 / (b - a);
+    const step = smartStep(a - 2, b + 2);
     let x = [];
     let y = [];
 
-    for (let i = a - 2; i <= b + 2; i += 0.05) {
+    for (let i = a - 2; i <= b + 2; i += step) {
         x.push(i);
         y.push((i >= a && i <= b) ? h : 0);
     }
@@ -711,10 +732,11 @@ function drawTriangular() {
 
     if (b <= a) { alert("Upper bound must be greater than lower bound."); return; }
 
+    const step = smartStep(a, b);
     let x = [];
     let y = [];
 
-    for (let i = a; i <= b; i += 0.05) {
+    for (let i = a; i <= b; i += step) {
         x.push(i);
         if (i <= c) {
             y.push((2 * (i - a)) / ((b - a) * (c - a)));
@@ -734,10 +756,13 @@ function drawNormal() {
     const mean = parseFloat(document.getElementById("mean").value);
     const std  = parseFloat(document.getElementById("std").value);
 
+    const lo = mean - 4 * std;
+    const hi = mean + 4 * std;
+    const step = smartStep(lo, hi);
     let x = [];
     let y = [];
 
-    for (let i = mean - 4 * std; i <= mean + 4 * std; i += 0.05) {
+    for (let i = lo; i <= hi; i += step) {
         x.push(i);
         y.push(normalPDF(i, mean, std));
     }
@@ -756,15 +781,16 @@ function drawLinear() {
 
     if (b <= a) { alert("Upper bound must be greater than lower bound."); return; }
 
+    const step = smartStep(a, b);
     let x = [];
     let y = [];
     let totalArea = 0;
 
-    for (let i = a; i <= b; i += 0.05) {
-        totalArea += slope * (i - a) * 0.05;
+    for (let i = a; i <= b; i += step) {
+        totalArea += slope * (i - a) * step;
     }
 
-    for (let i = a; i <= b; i += 0.05) {
+    for (let i = a; i <= b; i += step) {
         x.push(i);
         y.push(slope * (i - a) / totalArea);
     }
@@ -787,10 +813,11 @@ function drawPiecewise() {
 
     if (b <= a) { alert("Upper bound must be greater than lower bound."); return; }
 
+    const step = smartStep(a, b);
     let x = [];
     let y = [];
 
-    for (let i = a; i <= b; i += 0.05) {
+    for (let i = a; i <= b; i += step) {
         x.push(i);
         if      (i < break1) { y.push(h1); }
         else if (i < break2) { y.push(h2); }
