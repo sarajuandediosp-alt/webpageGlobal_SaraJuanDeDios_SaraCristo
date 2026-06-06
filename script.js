@@ -6,6 +6,18 @@ let uploadedData = [];
 let currentX = [];
 let currentY = [];
 let fittedParameters = {};
+let autoUpdateTimer = null;  // for debouncing
+
+//////////////////////////////////////////////////////////
+// DEBOUNCE HELPER
+//////////////////////////////////////////////////////////
+
+function debounce(fn, delay) {
+    return function(...args) {
+        clearTimeout(autoUpdateTimer);
+        autoUpdateTimer = setTimeout(() => fn(...args), delay);
+    };
+}
 
 //////////////////////////////////////////////////////////
 // INITIALIZATION
@@ -16,9 +28,11 @@ window.onload = function () {
         .getElementById("distribution")
         .addEventListener("change", updateDistribution);
 
+    const debouncedUpdate = debounce(autoUpdate, 300);
+
     const controls = document.querySelectorAll("input, select");
     controls.forEach(control => {
-        control.addEventListener("input", autoUpdate);
+        control.addEventListener("input", debouncedUpdate);
     });
 
     autoUpdate();
@@ -82,11 +96,18 @@ function processCSV(csvText) {
 // HISTOGRAM
 //////////////////////////////////////////////////////////
 
+// If dataset is huge, sample it down so Plotly doesn't freeze
+function sampleData(data, maxPoints = 2000) {
+    if (data.length <= maxPoints) return data;
+    const step = Math.ceil(data.length / maxPoints);
+    return data.filter((_, i) => i % step === 0);
+}
+
 function createHistogram() {
     Plotly.newPlot(
         "histogram",
         [{
-            x: uploadedData,
+            x: sampleData(uploadedData),
             type: "histogram",
             opacity: 0.7,
             name: "Dataset"
@@ -109,13 +130,20 @@ function fitDistribution() {
         return;
     }
 
-    const distribution = document.getElementById("fitDistributionType").value;
+    // Show a loading indicator so the user knows it's working
+    document.getElementById("parametersText").innerHTML   = "Calculating...";
+    document.getElementById("interpretationText").innerHTML = "";
 
-    if      (distribution === "uniform")    { fitUniform();    }
-    else if (distribution === "normal")     { fitNormal();     }
-    else if (distribution === "triangular") { fitTriangular(); }
-    else if (distribution === "linear")     { fitLinear();     }
-    else if (distribution === "piecewise")  { fitPiecewise();  }
+    // Yield to the browser first, then run the heavy work
+    setTimeout(() => {
+        const distribution = document.getElementById("fitDistributionType").value;
+
+        if      (distribution === "uniform")    { fitUniform();    }
+        else if (distribution === "normal")     { fitNormal();     }
+        else if (distribution === "triangular") { fitTriangular(); }
+        else if (distribution === "linear")     { fitLinear();     }
+        else if (distribution === "piecewise")  { fitPiecewise();  }
+    }, 20);
 }
 
 //////////////////////////////////////////////////////////
@@ -361,7 +389,7 @@ function drawFittedPiecewise(min, max, break1, break2, h1, h2, h3) {
 
 function drawHistogramAndPDF(x, y, title) {
     const histogram = {
-        x: uploadedData,
+        x: sampleData(uploadedData),
         type: "histogram",
         histnorm: "probability density",
         opacity: 0.35,
@@ -460,7 +488,7 @@ function pdfValue(x) {
 
 function integratePDF(start, end) {
     let area = 0;
-    const step = 0.001; // finer step for better accuracy
+    const step = 0.01; // 0.001 was too heavy and froze the browser
 
     for (let x = start; x < end; x += step) {
         area += pdfValue(x) * step;
