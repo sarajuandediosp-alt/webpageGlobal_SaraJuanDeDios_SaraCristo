@@ -852,16 +852,22 @@ function drawHistogramAndPDF(
 
         x: uploadedData,
 
-        type:
-        "histogram",
+        type: "histogram",
 
         histnorm:
         "probability density",
 
-        opacity: 0.6,
+        opacity: 0.35,
+
+        marker: {
+
+            color:
+            "#6b7cff"
+
+        },
 
         name:
-        "Dataset"
+        "Observed Data"
 
     };
 
@@ -871,20 +877,18 @@ function drawHistogramAndPDF(
 
         y: y,
 
-        type:
-        "scatter",
+        type: "scatter",
 
-        mode:
-        "lines",
+        mode: "lines",
 
         line: {
 
-            width: 3
+            width: 4
+            color: "#5fffff"
 
         },
 
-        name:
-        title
+        name: title
 
     };
 
@@ -903,27 +907,42 @@ function drawHistogramAndPDF(
         {
 
             title:
-            "Histogram + Fitted PDF",
+            "Empirical Modeling",
+
+            paper_bgcolor:
+            "#071426",
+
+            plot_bgcolor:
+            "#071426",
+
+            font: {
+
+                color:
+                "white"
+
+            },
 
             xaxis: {
 
                 title:
-                "Value"
+                "Value",
+
+                gridcolor:
+                "#1c3555"
 
             },
 
             yaxis: {
 
                 title:
-                "Density"
+                "Density",
+
+                gridcolor:
+                "#1c3555"
 
             }
 
         }
-
-    );
-
-}
 
 
 //////////////////////////////////////////////////////////
