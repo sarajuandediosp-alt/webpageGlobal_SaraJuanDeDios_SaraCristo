@@ -1960,4 +1960,49 @@ function autoUpdate() {
     calculateProbability();
 
 }
+function syncParameters() {
+
+    if(
+        fittedParameters.mean !== undefined
+    ){
+
+        document.getElementById("mean")
+        .value =
+        fittedParameters.mean;
+
+    }
+
+    if(
+        fittedParameters.std !== undefined
+    ){
+
+        document.getElementById("std")
+        .value =
+        fittedParameters.std;
+
+    }
+
+    if(
+        fittedParameters.min !== undefined
+    ){
+
+        document.getElementById("a")
+        .value =
+        fittedParameters.min;
+
+    }
+
+    if(
+        fittedParameters.max !== undefined
+    ){
+
+        document.getElementById("b")
+        .value =
+        fittedParameters.max;
+
+    }
+
+    updateDistribution();
+
+}
 
